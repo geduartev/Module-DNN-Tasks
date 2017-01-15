@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\ExtensionPack\4.0\MSBuild.ExtensionPack.tasks"></Import>
+  
+  <Target Name="AfterBuild" DependsOnTargets="CopyBin;CopyFiles;Zip"/>
+  
+  <PropertyGroup>
+    <WebsitePath>C:\inetpub\wwwroot\DevelopmentTests</WebsitePath>
+    <WebsiteBinPath>$(WebsitePath)\bin</WebsiteBinPath>
+    <ModuleFolderName>$(WebsitePath)\DesktopModules\Pluralsight\Tasks</ModuleFolderName>
+    <PackageFolderName>$(MSBuildProjectDirectory)\Package</PackageFolderName>
+    <PackageName>$(MSBuildProjectDirectory)\Tasks_01.00.00_Install.zip</PackageName>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <Views Include="*.ascx;" />
+    <Styles Include="*.css;" />
+    <Scripts Include="Scripts\*.SqlDataProvider"></Scripts>
+  </ItemGroup>
+  
+  <Target Name="CopyBin">
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\$(AssemblyName).dll" DestinationFolder="$(WebsiteBinPath)" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\$(AssemblyName).pdb" DestinationFolder="$(WebsiteBinPath)" />
+  </Target>
+  
+  <Target Name="CopyFiles">
+    <Copy SourceFiles="@(Views)" DestinationFolder="$(ModuleFolderName)" />
+    <Copy SourceFiles="@(Styles)" DestinationFolder="$(ModuleFolderName)" />
+  </Target>
+
+  <Target Name="CreatePackage">
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\$(AssemblyName).dll" DestinationFolder="$(PackageFolderName)"></Copy>
+    <Copy SourceFiles="@(Views)" DestinationFolder="$(PackageFolderName)"></Copy>
+    <Copy SourceFiles="@(Styles)" DestinationFolder="$(PackageFolderName)"></Copy>
+    <Copy SourceFiles="@(Scripts)" DestinationFolder="$(PackageFolderName)\Scripts"></Copy>
+  </Target>
+
+  <ItemGroup>
+    <ZipFiles Include="$(PackageFolderName)\*.*"></ZipFiles>
+  </ItemGroup>
+
+  <Target Name="Zip" DependsOnTargets="CreatePackage">
+    <Delete Files="$(PackageName)"></Delete>
+    <Zip TaskAction="Create" CompressPath="$(PackageFolderName)" RemoveRoot="$" ZipFileName="$(PackageName)"></Zip>
+  </Target>
+</Project>

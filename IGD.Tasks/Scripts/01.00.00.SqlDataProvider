@@ -1,0 +1,124 @@
+﻿--Create Table
+	IF NOT EXISTS (SELECT * FROM {databaseOwner}sysobjects
+					WHERE id = object_id(N'{databaseOwner}{objectQualifier}plTasks_Tasks')
+						AND OBJECTPROPERTY(id, N'IsTable') = 1)
+		BEGIN
+			CREATE TABLE {databaseOwner}{objectQualifier}plTasks_Tasks(
+				TaskId int IDENTITY(1,1) NOT NULL,
+				UserId int NOT NULL,
+				Name nvarchar(200) NOT NULL,
+				[Description] nvarchar(max) NOT NULL,
+				IsComplete bit NOT NULL,
+				CONSTRAINT PK_{objectQualifier}plTasks_Tasks
+					PRIMARY KEY CLUSTERED(TaskId ASC)
+			)
+		END
+	GO
+
+	IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS
+					WHERE TABLE_NAME = object_id(N'{databaseOwner}{objectQualifier}plTasks_Tasks')
+						AND COLUMN_NAME = 'UserId')
+		BEGIN
+			ALTER TABLE {databaseOwner}{objectQualifier}plTasks_Tasks
+				ADD UserId int NOT NULL
+		END
+	GO
+
+
+-- Get Tasks
+IF EXISTS (SELECT * FROM sys.objects
+			WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}plTasks_GetTasks')
+				AND type in (N'P', N'PC'))
+	DROP PROCEDURE {databaseOwner}{objectQualifier}plTasks_GetTasks
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}plTasks_GetTasks
+	@UserId int
+AS
+	SELECT * FROM {databaseOwner}{objectQualifier}plTasks_Tasks
+	WHERE UserId = @UserId
+GO
+
+
+-- Get Task ById
+IF EXISTS (SELECT * FROM sys.objects
+			WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}plTasks_GetTask')
+				AND type in (N'P', N'PC'))
+	DROP PROCEDURE {databaseOwner}{objectQualifier}plTasks_GetTask
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}plTasks_GetTask
+	@TaskId int
+AS
+	SELECT * FROM {databaseOwner}{objectQualifier}plTasks_Tasks
+	WHERE TaskId = @TaskId
+GO
+
+
+--Create Task
+IF EXISTS (SELECT * FROM sys.objects
+			WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}plTasks_CreateTask')
+				AND type in (N'P', N'PC'))
+	DROP PROCEDURE {databaseOwner}{objectQualifier}plTasks_CreateTask
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}plTasks_CreateTask
+	@Name nvarchar(200),
+	@Description nvarchar(max),
+	@IsComplete bit,
+	@UserId int
+AS
+	INSERT INTO {databaseOwner}{objectQualifier}plTasks_Tasks (
+		Name,
+		[Description],
+		IsComplete,
+		UserId
+	)
+	VALUES (
+		@Name,
+		@Description,
+		@IsComplete,
+		@UserId
+	)
+
+	SELECT @@IDENTITY --Devuelve el Id recién insertado.
+GO
+
+
+-- Update Task
+IF EXISTS (SELECT * FROM sys.objects
+			WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}plTasks_UpdateTasks')
+				AND type in (N'P', N'PC'))
+	DROP PROCEDURE {databaseOwner}{objectQualifier}plTasks_UpdateTasks
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}plTasks_UpdateTasks
+	@TaskId int,
+	@Name nvarchar(200),
+	@Description nvarchar(max),
+	@IsComplete bit
+AS
+	UPDATE {databaseOwner}{objectQualifier}plTasks_Tasks
+		SET
+			Name = @Name,
+			[Description] = @Description,
+			IsComplete = @IsComplete
+		WHERE TaskId = @TaskId
+GO
+
+
+-- Delete Task
+IF EXISTS (SELECT * FROM sys.objects
+			WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}plTasks_DeleteTask')
+				AND type in (N'P', N'PC'))
+	DROP PROCEDURE {databaseOwner}{objectQualifier}plTasks_DeleteTask
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}plTasks_DeleteTask
+	@TaskId int
+AS
+	DELETE FROM {databaseOwner}{objectQualifier}plTasks_Tasks
+	WHERE TaskId = @TaskId
+GO
+
+--Create Data
