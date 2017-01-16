@@ -1,7 +1,7 @@
 ﻿<dotnetnuke type="Package" version="5.0">
   <packages><package name="IGD.Tasks" type="Module" version="1.0.0">
-  <friendlyName>Pluralsight Task2</friendlyName>
-  <description>Pluralsight Task2</description>
+  <friendlyName>IGD Task</friendlyName>
+  <description>IGD Task</description>
   <iconFile />
   <owner>
     <name />
@@ -15,18 +15,18 @@
     <component type="Module">
       <desktopModule>
         <moduleName>IGD.Tasks</moduleName>
-        <foldername>Pluralsight/Tasks</foldername>
+        <foldername>IGD/Tasks</foldername>
         <businessControllerClass />
         <supportedFeatures />
         <moduleDefinitions>
           <moduleDefinition>
-            <friendlyName>Pluralsight Task2</friendlyName>
-            <definitionName>Pluralsight Task2</definitionName>
+            <friendlyName>IGD Task</friendlyName>
+            <definitionName>IGD Task</definitionName>
             <defaultCacheTime>0</defaultCacheTime>
             <moduleControls>
               <moduleControl>
                 <controlKey />
-                <controlSrc>DesktopModules/Pluralsight/Tasks/TaskList.ascx</controlSrc>
+                <controlSrc>DesktopModules/IGD/Tasks/TaskList.ascx</controlSrc>
                 <supportsPartialRendering>False</supportsPartialRendering>
                 <controlTitle />
                 <controlType>View</controlType>
@@ -37,7 +37,7 @@
               </moduleControl>
               <moduleControl>
                 <controlKey>Edit</controlKey>
-                <controlSrc>desktopmodules/pluralsight/tasks2/EditTask.ascx</controlSrc>
+                <controlSrc>desktopmodules/igd/tasks/EditTask.ascx</controlSrc>
                 <supportsPartialRendering>False</supportsPartialRendering>
                 <controlTitle />
                 <controlType>Edit</controlType>
@@ -47,7 +47,7 @@
               </moduleControl>
               <moduleControl>
                 <controlKey>Settings</controlKey>
-                <controlSrc>desktopmodules/pluralsight/tasks2/Settings.ascx</controlSrc>
+                <controlSrc>desktopmodules/igd/tasks/Settings.ascx</controlSrc>
                 <supportsPartialRendering>False</supportsPartialRendering>
                 <controlTitle />
                 <controlType>Edit</controlType>
@@ -64,13 +64,13 @@
       <assemblies>
         <basePath>bin</basePath>
         <assembly>
-          <name>Pluralsight.Task2.dll</name>
+          <name>IGD.Task2.dll</name>
         </assembly>
       </assemblies>
     </component>
     <component type="File">
       <files>
-        <basePath>DesktopModules\Pluralsight\Tasks</basePath>
+        <basePath>DesktopModules\IGD\Tasks</basePath>
         <file>
           <name>EditTask.ascx</name>
         </file>
